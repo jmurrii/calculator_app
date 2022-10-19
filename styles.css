@@ -34,6 +34,8 @@
   display: flex;
   justify-content: flex-end;
   align-items: flex-end;
+  /* May need to change this for JS */
+  pointer-events: none;
 }
 
 #display > p {
@@ -51,6 +53,10 @@
   background-color: rgb(44, 43, 43);
   border: solid 1px rgb(0, 0, 0);
   margin: 5px;
+  transition: ease-in-out 0.4s;
+}
+.btn:hover {
+  background-color: rgb(62, 60, 60);
 }
 
 .btn:hover {
@@ -59,16 +65,32 @@
 
 .green {
   background-color: rgb(28, 118, 28);
+  transition: ease-in-out 0.4s;
+}
+.green:hover {
+  background-color: rgb(34, 134, 34);
 }
 .red {
   background-color: rgba(195, 80, 80, 0.825);
   margin-left: 1.4rem;
+  transition: ease-in-out 0.4s;
+}
+.red:hover {
+  background-color: rgba(229, 102, 102, 0.825);
 }
 .blue {
   background-color: rgba(31, 31, 207, 0.849);
+  transition: ease-in-out 0.4s;
+}
+.blue:hover {
+  background-color: rgba(52, 52, 232, 0.849);
 }
 .gray {
   background-color: rgb(137, 129, 129);
+  transition: ease-in-out 0.4s;
+}
+.gray:hover {
+  background-color: rgb(163, 152, 152);
 }
 
 .divisor {
