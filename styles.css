@@ -8,6 +8,10 @@
   box-sizing: border-box;
 }
 
+body {
+  background-color: antiquewhite;
+}
+
 .main-container {
   display: flex;
   justify-content: center;
@@ -17,9 +21,18 @@
 .calc-border {
   background-color: rgba(221, 211, 211, 0.934);
   width: 450px;
-  height: 600px;
+  height: 605px;
   border: solid 1px black;
-  padding-top: 50px;
+  padding: 8px 0;
+  box-shadow: 10px 10px 10px rgb(181, 173, 135);
+}
+
+.logo-container {
+  display: flex;
+  justify-content: flex-end;
+}
+#logo {
+  margin-bottom: 5px;
 }
 
 .row {
