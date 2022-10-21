@@ -40,7 +40,7 @@ body {
   justify-content: space-evenly;
 }
 
-#display {
+#display-container {
   flex: 1;
   margin-right: 1.5rem;
   margin-left: 1.4rem;
@@ -51,10 +51,10 @@ body {
   pointer-events: none;
 }
 
-#display > p {
+#display-text {
   font-family: "Saira", sans-serif;
   font-style: italic;
-  font-size: 3rem;
+  font-size: 2.5rem;
   padding-right: 10px;
 }
 
