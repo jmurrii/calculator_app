@@ -17,11 +17,22 @@ numbers.forEach((number) => {
             theCurrentTotal = 0;
         }
 
-        const numberValue = number.childNodes[0].nodeValue;
-        // if(operatorValue == '-'){
-        //     numberValue = total - numberValue;
-        // }
-        operand1 += numberValue;
+        let numberValue = number.childNodes[0].nodeValue;
+        if (operatorValue == '-') {
+            numberValue = 0 - numberValue;
+            if (operatorValue == '-' && operand1) {
+
+                operand1 = operand1.toString()
+                numberValue = numberValue.toString();
+                operand1 = operand1 + Math.abs(numberValue);
+                console.log("nested iF", operand1)
+            } else {
+                operand1 = numberValue;
+                console.log("from the else block", operand1);
+            }
+        } else {
+            operand1 += numberValue;
+        }
         console.log("Operand1", Number(operand1));
         displayFunc(Number(operand1));
         return operand1;
@@ -41,8 +52,9 @@ operators.forEach((operator) => {
         if (operatorValue == '+') {
             additionFunc();
             return operatorValue = '+';
-        } else {
-            console.log("operator else block:");
+        } else if (operatorValue == '-') {
+            subtractionFunc();
+            return operatorValue = '-';
         }
 
     })
@@ -57,10 +69,20 @@ function additionFunc() {
     console.log("additionFunc theCurrentTotalIs: ", theCurrentTotal);
 }
 
+function subtractionFunc() {
+    tempTotal = Number(operand1);
+    operand1 = 0;
+    theCurrentTotal += tempTotal;
+    displayFunc(theCurrentTotal);
+    console.log("subtractionFunc theCurrentTotalIs: ", theCurrentTotal);
+}
+
 equals.addEventListener('click', () => {
     console.log("equals operatorValue: ", operatorValue);
     if (operatorValue == '+') {
         additionFunc();
+    } else if (operatorValue == '-') {
+        subtractionFunc();
     }
     operatorValue = '';
 });
