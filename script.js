@@ -32,7 +32,7 @@ function getOperand() {
             operand1 = operand1.toString()
             numberValue = numberValue.toString();
             operand1 = operand1 + Math.abs(numberValue);
-            console.log("nested iF", operand1)
+            console.log("nested if", operand1)
         } else {
             operand1 = numberValue;
             console.log("from the else block", operand1);
@@ -40,18 +40,18 @@ function getOperand() {
     } else {
         operand1 += numberValue;
     }
+
     console.log("Operand1", Number(operand1));
-    displayFunc(Number(operand1));
+    operand1 = Number(operand1);
+    displayFunc(operand1);
     return operand1;
 }
-
 
 function displayFunc(displayNum) {
     displayScreen.innerText = displayNum;
 }
 
 operators.forEach((operator) => {
-
     operator.addEventListener('click', () => {
 
         operatorValue = operator.innerText;
@@ -61,14 +61,28 @@ operators.forEach((operator) => {
         } else if (operatorValue == '-') {
             subtractionFunc();
             return operatorValue = '-';
+        } else if (operatorValue == 'x') {
+            multiplyFunc();
+            return operatorValue = 'x';
         }
-
-    })
-
+    });
 });
 
+
+function multiplyFunc() {
+
+    theCurrentTotal *= operand1;
+    console.log("theCurrentTotal is XXX", theCurrentTotal);
+    tempTotal = operand1;
+    operand1 = 0;
+    theCurrentTotal += tempTotal;
+    displayFunc(theCurrentTotal);
+    console.log("MultiplyFunc theCurrentTotalIs: ", theCurrentTotal);
+}
+
+
 function additionFunc() {
-    tempTotal = Number(operand1);
+    tempTotal = operand1;
     operand1 = 0;
     theCurrentTotal += tempTotal;
     displayFunc(theCurrentTotal);
@@ -76,7 +90,7 @@ function additionFunc() {
 }
 
 function subtractionFunc() {
-    tempTotal = Number(operand1);
+    tempTotal = operand1;
     operand1 = 0;
     theCurrentTotal += tempTotal;
     displayFunc(theCurrentTotal);
@@ -89,6 +103,8 @@ equals.addEventListener('click', () => {
         additionFunc();
     } else if (operatorValue == '-') {
         subtractionFunc();
+    } else if (operatorValue = 'x') {
+        multiplyFunc();
     }
     operatorValue = '';
 });
@@ -100,6 +116,5 @@ resetCalculator.addEventListener('click', () => {
     tempTotal = 0;
     theCurrentTotal = 0;
     operatorValue = '';
-
     displayScreen.innerText = 0;
 });
