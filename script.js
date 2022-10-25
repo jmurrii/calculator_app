@@ -8,37 +8,43 @@ const equals = document.getElementById('equals');
 let operand1 = 0;
 let tempTotal = 0;
 let theCurrentTotal = 0;
+let numberValue;
 let operatorValue;
 
 numbers.forEach((number) => {
     number.addEventListener('click', () => {
-        console.log("the operator value is: ", operatorValue);
-        if (!operatorValue) {
-            theCurrentTotal = 0;
-        }
 
-        let numberValue = number.childNodes[0].nodeValue;
-        if (operatorValue == '-') {
-            numberValue = 0 - numberValue;
-            if (operatorValue == '-' && operand1) {
-
-                operand1 = operand1.toString()
-                numberValue = numberValue.toString();
-                operand1 = operand1 + Math.abs(numberValue);
-                console.log("nested iF", operand1)
-            } else {
-                operand1 = numberValue;
-                console.log("from the else block", operand1);
-            }
-        } else {
-            operand1 += numberValue;
-        }
-        console.log("Operand1", Number(operand1));
-        displayFunc(Number(operand1));
-        return operand1;
-
+        numberValue = number.childNodes[0].nodeValue;
+        getOperand();
     })
 });
+
+function getOperand() {
+    console.log("the operator value is: ", operatorValue);
+    if (!operatorValue) {
+        theCurrentTotal = 0;
+    }
+
+    if (operatorValue == '-') {
+        numberValue = 0 - numberValue;
+
+        if (operatorValue == '-' && operand1) {
+            operand1 = operand1.toString()
+            numberValue = numberValue.toString();
+            operand1 = operand1 + Math.abs(numberValue);
+            console.log("nested iF", operand1)
+        } else {
+            operand1 = numberValue;
+            console.log("from the else block", operand1);
+        }
+    } else {
+        operand1 += numberValue;
+    }
+    console.log("Operand1", Number(operand1));
+    displayFunc(Number(operand1));
+    return operand1;
+}
+
 
 function displayFunc(displayNum) {
     displayScreen.innerText = displayNum;
