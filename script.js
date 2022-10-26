@@ -27,10 +27,7 @@ function checkOperatorValue() {
     if (operatorValue == '-') {
         console.log(operand1);
         subtractionFunc();
-    } else if (operatorValue == 'x') {
-        console.log("we in multiply");
-    }
-    else {
+    } else {
         operand1 += numberValue;
     }
     operand1 = Number(operand1);
@@ -38,8 +35,6 @@ function checkOperatorValue() {
     displayFunc(operand1);
     return operand1;
 }
-
-
 
 function displayFunc(displayNum) {
     displayScreen.innerText = displayNum;
@@ -61,11 +56,25 @@ operators.forEach((operator) => {
     operator.addEventListener('click', () => {
 
         operatorValue = operator.innerText;
-        updateTotal();
+
+        if (operatorValue == 'x' && theCurrentTotal && operand1) {
+            console.log('all the checks look good');
+            theCurrentTotal *= operand1;
+            operand1 = 0;
+            displayFunc(theCurrentTotal);
+            console.log("operand1", operand1);
+            console.log("theCurrentTotal", theCurrentTotal);
+
+        } else {
+            updateTotal();
+        }
     });
 });
 
 function updateTotal() {
+    console.log("operatorValue in updateTotal:".operatorValue)
+
+
     tempTotal = operand1;
     operand1 = 0;
     theCurrentTotal += tempTotal;
@@ -75,7 +84,17 @@ function updateTotal() {
 
 equals.addEventListener('click', () => {
 
-    updateTotal();
+    if (operatorValue == 'x') {
+        console.log("equals:", operand1);
+        theCurrentTotal *= operand1;
+        console.log("the TOTAL", theCurrentTotal);
+        displayFunc(theCurrentTotal);
+        operand1 = 0
+        // updateTotal();
+    } else {
+        updateTotal();
+    }
+
     operatorValue = '';
 });
 
