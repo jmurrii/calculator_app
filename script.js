@@ -25,7 +25,6 @@ function checkOperatorValue() {
     }
 
     if (operatorValue == '-') {
-        console.log(operand1);
         subtractionFunc();
     } else {
         operand1 += numberValue;
@@ -37,7 +36,12 @@ function checkOperatorValue() {
 }
 
 function displayFunc(displayNum) {
-    displayScreen.innerText = displayNum;
+
+    if (!Number.isInteger(displayNum)) {
+        displayScreen.innerText = displayNum.toFixed(3) * 1;
+    } else {
+        displayScreen.innerText = displayNum;
+    }
 }
 
 function subtractionFunc() {
@@ -51,6 +55,11 @@ function subtractionFunc() {
         operand1 = numberValue;
     }
 }
+function multiplicationTotal() {
+    theCurrentTotal *= operand1;
+    displayFunc(theCurrentTotal);
+    operand1 = 0
+}
 
 operators.forEach((operator) => {
     operator.addEventListener('click', () => {
@@ -58,13 +67,14 @@ operators.forEach((operator) => {
         operatorValue = operator.innerText;
 
         if (operatorValue == 'x' && theCurrentTotal && operand1) {
-            console.log('all the checks look good');
-            theCurrentTotal *= operand1;
+            multiplicationTotal();
+
+        } else if (operatorValue == '÷') {
+            theCurrentTotal = operand1;
             operand1 = 0;
-            displayFunc(theCurrentTotal);
+            console.log("operatorValue from op:", operatorValue);
             console.log("operand1", operand1);
             console.log("theCurrentTotal", theCurrentTotal);
-
         } else {
             updateTotal();
         }
@@ -74,7 +84,6 @@ operators.forEach((operator) => {
 function updateTotal() {
     console.log("operatorValue in updateTotal:".operatorValue)
 
-
     tempTotal = operand1;
     operand1 = 0;
     theCurrentTotal += tempTotal;
@@ -82,19 +91,20 @@ function updateTotal() {
     console.log("updateTotal theCurrentTotalIs: ", theCurrentTotal);
 }
 
+
+
 equals.addEventListener('click', () => {
 
     if (operatorValue == 'x') {
-        console.log("equals:", operand1);
-        theCurrentTotal *= operand1;
-        console.log("the TOTAL", theCurrentTotal);
+        multiplicationTotal();
+    } else if (operatorValue == '÷') {
+        theCurrentTotal /= operand1;
+        operand1 = 0;
         displayFunc(theCurrentTotal);
-        operand1 = 0
-        // updateTotal();
+        console.log("theCurrentDivisionTotal", theCurrentTotal);
     } else {
         updateTotal();
     }
-
     operatorValue = '';
 });
 
