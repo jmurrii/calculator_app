@@ -9,39 +9,29 @@ let tempTotal = 0;
 let theCurrentTotal = 0;
 let numberValue;
 let operatorValue;
+let maxLength = false;
+let totalDigits = 0;
 
 numbers.forEach((number) => {
     number.addEventListener('click', () => {
-
         numberValue = number.childNodes[0].nodeValue;
-        checkOperatorValue();
+        getOperand1Value();
     })
 });
 
-function checkOperatorValue() {
-    console.log("the operator value is: ", operatorValue);
+function getOperand1Value() {
+
     if (!operatorValue) {
         theCurrentTotal = 0;
-    }
-
-    if (operatorValue == '-') {
+    } if (operatorValue == '-') {
         subtractionFunc();
     } else {
         operand1 += numberValue;
     }
     operand1 = Number(operand1);
     console.log("Operand1", operand1);
-    displayFunc(operand1);
-    return operand1;
-}
+    displayFunc(Number(operand1));
 
-function displayFunc(displayNum) {
-
-    if (!Number.isInteger(displayNum)) {
-        displayScreen.innerText = displayNum.toFixed(3) * 1;
-    } else {
-        displayScreen.innerText = displayNum;
-    }
 }
 
 function subtractionFunc() {
@@ -55,26 +45,42 @@ function subtractionFunc() {
         operand1 = numberValue;
     }
 }
+
+function displayFunc(displayNum) {
+
+    totalDigits = displayScreen.innerText.length;
+
+    if (totalDigits == 9) {
+        numbers.forEach((number) => {
+            number.setAttribute('disabled', true);
+            totalDigits = 0;
+            console.log("disable numbers called");
+        });
+
+    }
+
+    if (!Number.isInteger(displayNum)) {
+        displayScreen.innerText = displayNum.toFixed(3) * 1;
+    } else {
+        displayScreen.innerText = displayNum;
+    }
+}
+
 function multiplicationTotal() {
     theCurrentTotal *= operand1;
     displayFunc(theCurrentTotal);
-    operand1 = 0
+    operand1 = 0;
 }
 
 operators.forEach((operator) => {
     operator.addEventListener('click', () => {
-
+        enableNumbers();
         operatorValue = operator.innerText;
 
         if (operatorValue == 'x' && theCurrentTotal && operand1) {
             multiplicationTotal();
-
-        } else if (operatorValue == '÷') {
-            theCurrentTotal = operand1;
-            operand1 = 0;
-            console.log("operatorValue from op:", operatorValue);
-            console.log("operand1", operand1);
-            console.log("theCurrentTotal", theCurrentTotal);
+        } else if (operatorValue == '÷' && theCurrentTotal && operand1) {
+            divisionTotal();
         } else {
             updateTotal();
         }
@@ -82,7 +88,6 @@ operators.forEach((operator) => {
 });
 
 function updateTotal() {
-    console.log("operatorValue in updateTotal:".operatorValue)
 
     tempTotal = operand1;
     operand1 = 0;
@@ -91,17 +96,19 @@ function updateTotal() {
     console.log("updateTotal theCurrentTotalIs: ", theCurrentTotal);
 }
 
+function divisionTotal() {
+    theCurrentTotal /= operand1;
+    operand1 = 0;
+    displayFunc(theCurrentTotal);
+}
 
 
 equals.addEventListener('click', () => {
-
+    enableNumbers();
     if (operatorValue == 'x') {
         multiplicationTotal();
     } else if (operatorValue == '÷') {
-        theCurrentTotal /= operand1;
-        operand1 = 0;
-        displayFunc(theCurrentTotal);
-        console.log("theCurrentDivisionTotal", theCurrentTotal);
+        divisionTotal();
     } else {
         updateTotal();
     }
@@ -114,4 +121,19 @@ resetCalculator.addEventListener('click', () => {
     theCurrentTotal = 0;
     operatorValue = '';
     displayScreen.innerText = 0;
+
+    enableNumbers();
+
 });
+
+function enableNumbers() {
+
+    maxLength = false;
+
+    numbers.forEach((number) => {
+        number.removeAttribute('disabled', true);
+        console.log("enableNumbers called");
+    });
+
+    displayFunc(theCurrentTotal);
+}
