@@ -34,8 +34,7 @@ function getOperand1Value() {
         subtractionFunc();
     } else if (numberValue !== '.' && isDecimal) {
         makeDecimal();
-    }
-    else {
+    } else {
         operand1 += numberValue;
     }
     operand1 = Number(operand1);
@@ -163,4 +162,3 @@ resetCalculator.addEventListener('click', () => {
     displayScreen.innerText = 0;
     enableNumbers();
 });
-
