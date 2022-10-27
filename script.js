@@ -5,20 +5,15 @@ const operators = document.querySelectorAll('.operators');
 const equals = document.getElementById('equals');
 
 let operand1 = 0;
-let tempTotal = 0;
 let theCurrentTotal = 0;
 let numberValue;
 let operatorValue;
 let previousOperator;
 let totalDigits = 0;
 
-
-
 numbers.forEach((number) => {
     number.addEventListener('click', () => {
         numberValue = number.childNodes[0].nodeValue;
-        previousOperator;
-        operand1;
         getOperand1Value();
     })
 });
@@ -29,7 +24,6 @@ function getOperand1Value() {
         theCurrentTotal = 0;
     }
 
-
     if (operatorValue == '-') {
         subtractionFunc();
     } else {
@@ -38,7 +32,6 @@ function getOperand1Value() {
     operand1 = Number(operand1);
     console.log("Operand1", operand1);
     displayFunc(Number(operand1));
-
 }
 
 function subtractionFunc() {
@@ -85,105 +78,63 @@ function enableNumbers() {
     displayFunc(theCurrentTotal);
 }
 
-function multiplicationTotal() {
+operators.forEach((operator) => {
+    operator.addEventListener('click', () => {
+        enableNumbers();
+
+        operatorValue = operator.innerText;
+
+        if (!previousOperator) {
+            addToCurrentTotal()
+        } else {
+            calculate();
+        }
+        previousOperator = operatorValue;
+    });
+});
+
+
+function calculate() {
+    if (previousOperator == '+' || previousOperator == '-') {
+        addToCurrentTotal();
+    } else if (previousOperator == 'x') {
+        multiply();
+    } else {
+        divide();
+    }
+}
+
+function addToCurrentTotal() {
+
+    theCurrentTotal += operand1;
+    operand1 = 0;
+    displayFunc(theCurrentTotal);
+}
+
+function multiply() {
     theCurrentTotal *= operand1;
     displayFunc(theCurrentTotal);
     operand1 = 0;
 }
 
-operators.forEach((operator) => {
-    operator.addEventListener('click', () => {
-        enableNumbers();
-        console.log("previousOperator", previousOperator);
-        operatorValue = operator.innerText;
-        console.log("operatorValue", operatorValue);
-
-        if (!previousOperator) {
-            checkOperatorValue();
-        } else {
-            calculate();
-        }
-
-        previousOperator = operatorValue;
-
-    });
-});
-
-function checkOperatorValue() {
-    if (operatorValue == '+') {
-        theCurrentTotal += operand1;
-        operand1 = 0;
-        displayFunc(theCurrentTotal);
-    } else if (operatorValue == '-') {
-        theCurrentTotal += operand1;
-        operand1 = 0;
-        displayFunc(theCurrentTotal);
-    } else if (operatorValue == 'x') {
-        theCurrentTotal += operand1;
-        operand1 = 0;
-        displayFunc(theCurrentTotal);
-    } else {
-        theCurrentTotal += operand1;
-        operand1 = 0;
-        displayFunc(theCurrentTotal);
-    }
-
-
-}
-
-function calculate() {
-    if (previousOperator == '+') {
-        theCurrentTotal += operand1;
-        operand1 = 0;
-        displayFunc(theCurrentTotal);
-    } else if (previousOperator == '-') {
-        theCurrentTotal += operand1;
-        operand1 = 0;
-        displayFunc(theCurrentTotal);
-    } else if (previousOperator == 'x') {
-        theCurrentTotal *= operand1;
-        operand1 = 0;
-        displayFunc(theCurrentTotal);
-    } else {
-        theCurrentTotal /= operand1;
-        operand1 = 0;
-        displayFunc(theCurrentTotal);
-    }
-}
-
-function updateTotal() {
-
-    // theCurrentTotal += operand1;
-    // operand1 = 0;
-    // displayFunc(theCurrentTotal);
-
-    tempTotal = operand1;
-    operand1 = 0;
-    theCurrentTotal += tempTotal;
-    displayFunc(theCurrentTotal);
-    console.log("updateTotal theCurrentTotalIs: ", theCurrentTotal);
-}
-
-function divisionTotal() {
+function divide() {
     theCurrentTotal /= operand1;
     operand1 = 0;
     displayFunc(theCurrentTotal);
 }
 
-
 equals.addEventListener('click', () => {
     enableNumbers();
     equalsFunc();
-
 });
 
 function equalsFunc() {
     if (operatorValue == 'x') {
-        multiplicationTotal();
+        multiply();
     } else if (operatorValue == '÷') {
-        divisionTotal();
+        divide();
     } else {
-        updateTotal();
+        addToCurrentTotal();
     }
     operatorValue = '';
     previousOperator = '';
@@ -196,8 +147,6 @@ resetCalculator.addEventListener('click', () => {
     operatorValue = '';
     previousOperator = '';
     displayScreen.innerText = 0;
-
     enableNumbers();
-
 });
 
