@@ -9,8 +9,8 @@ let theCurrentTotal = 0;
 let numberValue;
 let operatorValue;
 let previousOperator;
-let totalDigits = 0;
 let isDecimal = false;
+let totalDigits = 0;
 
 numbers.forEach((number) => {
     number.addEventListener('click', () => {
@@ -56,7 +56,6 @@ function subtractionFunc() {
 }
 
 function makeDecimal() {
-
     operand1 += numberValue;
     operand1 = operand1 / 10;
     isDecimal = false;
@@ -109,6 +108,12 @@ operators.forEach((operator) => {
     });
 });
 
+function addToCurrentTotal() {
+
+    theCurrentTotal += operand1;
+    operand1 = 0;
+    displayFunc(theCurrentTotal);
+}
 
 function calculate() {
     if (previousOperator == '+' || previousOperator == '-') {
@@ -118,13 +123,6 @@ function calculate() {
     } else {
         divide();
     }
-}
-
-function addToCurrentTotal() {
-
-    theCurrentTotal += operand1;
-    operand1 = 0;
-    displayFunc(theCurrentTotal);
 }
 
 function multiply() {
