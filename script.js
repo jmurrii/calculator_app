@@ -10,12 +10,18 @@ let numberValue;
 let operatorValue;
 let previousOperator;
 let totalDigits = 0;
+let isDecimal = false;
 
 numbers.forEach((number) => {
     number.addEventListener('click', () => {
+
         numberValue = number.childNodes[0].nodeValue;
+
+        if (numberValue == '.') {
+            isDecimal = true;
+        }
         getOperand1Value();
-    })
+    });
 });
 
 function getOperand1Value() {
@@ -26,7 +32,10 @@ function getOperand1Value() {
 
     if (operatorValue == '-') {
         subtractionFunc();
-    } else {
+    } else if (numberValue !== '.' && isDecimal) {
+        makeDecimal();
+    }
+    else {
         operand1 += numberValue;
     }
     operand1 = Number(operand1);
@@ -44,6 +53,13 @@ function subtractionFunc() {
     } else {
         operand1 = numberValue;
     }
+}
+
+function makeDecimal() {
+
+    operand1 += numberValue;
+    operand1 = operand1 / 10;
+    isDecimal = false;
 }
 
 function displayFunc(displayNum) {
@@ -81,7 +97,7 @@ function enableNumbers() {
 operators.forEach((operator) => {
     operator.addEventListener('click', () => {
         enableNumbers();
-
+        isDecimal = false;
         operatorValue = operator.innerText;
 
         if (!previousOperator) {
@@ -125,6 +141,7 @@ function divide() {
 
 equals.addEventListener('click', () => {
     enableNumbers();
+    isDecimal = false;
     equalsFunc();
 });
 
@@ -142,7 +159,6 @@ function equalsFunc() {
 
 resetCalculator.addEventListener('click', () => {
     operand1 = 0;
-    tempTotal = 0;
     theCurrentTotal = 0;
     operatorValue = '';
     previousOperator = '';
