@@ -9,12 +9,17 @@ let tempTotal = 0;
 let theCurrentTotal = 0;
 let numberValue;
 let operatorValue;
-let maxLength = false;
+let previousOperator;
 let totalDigits = 0;
+
+let multiplyNextValue = false;
+
 
 numbers.forEach((number) => {
     number.addEventListener('click', () => {
         numberValue = number.childNodes[0].nodeValue;
+        previousOperator;
+        operand1;
         getOperand1Value();
     })
 });
@@ -23,7 +28,10 @@ function getOperand1Value() {
 
     if (!operatorValue) {
         theCurrentTotal = 0;
-    } if (operatorValue == '-') {
+    }
+
+
+    if (operatorValue == '-') {
         subtractionFunc();
     } else {
         operand1 += numberValue;
@@ -75,15 +83,35 @@ function multiplicationTotal() {
 operators.forEach((operator) => {
     operator.addEventListener('click', () => {
         enableNumbers();
+        console.log("previousOperator", previousOperator);
+
         operatorValue = operator.innerText;
 
-        if (operatorValue == 'x' && theCurrentTotal && operand1) {
+        if (previousOperator == '+' && operatorValue == 'x' && theCurrentTotal && operand1) {
+
+            theCurrentTotal += operand1;
+            operand1 = 0;
+            displayFunc(theCurrentTotal);
+            multiplyNextValue = true;
+
+        } else if (previousOperator == 'x' && operatorValue == '-' && theCurrentTotal && operand1) {
+            theCurrentTotal *= operand1;
+            operand1 = 0;
+            displayFunc(theCurrentTotal);
+        } else if (previousOperator == '-' && operatorValue == '÷' && theCurrentTotal && operand1) {
+            theCurrentTotal += operand1;
+            operand1 = 0;
+            displayFunc(theCurrentTotal);
+        }
+        else if (operatorValue == 'x' && theCurrentTotal && operand1) {
             multiplicationTotal();
         } else if (operatorValue == '÷' && theCurrentTotal && operand1) {
             divisionTotal();
         } else {
             updateTotal();
         }
+        previousOperator = operatorValue;
+
     });
 });
 
@@ -120,6 +148,7 @@ resetCalculator.addEventListener('click', () => {
     tempTotal = 0;
     theCurrentTotal = 0;
     operatorValue = '';
+    previousOperator = '';
     displayScreen.innerText = 0;
 
     enableNumbers();
@@ -127,8 +156,6 @@ resetCalculator.addEventListener('click', () => {
 });
 
 function enableNumbers() {
-
-    maxLength = false;
 
     numbers.forEach((number) => {
         number.removeAttribute('disabled', true);
