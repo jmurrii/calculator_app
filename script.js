@@ -1,164 +1,90 @@
 const displayScreen = document.getElementById('displayScreen');
 const resetCalculator = document.getElementById('resetCalculator');
-const numbers = document.querySelectorAll('.numbers');
-const operators = document.querySelectorAll('.operators');
+const numberButtons = document.querySelectorAll('.numbers');
+const operatorButtons = document.querySelectorAll('.operators');
 const equals = document.getElementById('equals');
 
-let operand1 = 0;
-let theCurrentTotal = 0;
-let numberValue;
-let operatorValue;
-let previousOperator;
-let isDecimal = false;
-let totalDigits = 0;
+let firstNumber = '';
+let secondNumber = '';
+let storedOperator = '';
+let currentOperator = '';
 
-numbers.forEach((number) => {
-    number.addEventListener('click', () => {
-
-        numberValue = number.childNodes[0].nodeValue;
-
-        if (numberValue == '.') {
-            isDecimal = true;
-        }
-        getOperand1Value();
-    });
+equals.addEventListener('click', () => {
+    if (firstNumber && currentOperator != '' && secondNumber) {
+        calculate();
+    }
 });
 
-function getOperand1Value() {
+resetCalculator.addEventListener('click', () => {
+    firstNumber = '';
+    secondNumber = '';
+    storedOperator = '';
+    currentOperator = '';
+    displayScreen.innerText = 0;
+});
 
-    if (!operatorValue) {
-        theCurrentTotal = 0;
-    }
-
-    if (operatorValue == '-') {
-        subtractionFunc();
-    } else if (numberValue !== '.' && isDecimal) {
-        makeDecimal();
-    } else {
-        operand1 += numberValue;
-    }
-    operand1 = Number(operand1);
-    console.log("Operand1", operand1);
-    displayFunc(Number(operand1));
-}
-
-function subtractionFunc() {
-    numberValue = 0 - numberValue;
-
-    if (operatorValue == '-' && operand1) {
-        operand1 = operand1.toString()
-        numberValue = numberValue.toString();
-        operand1 = operand1 + Math.abs(numberValue);
-    } else {
-        operand1 = numberValue;
-    }
-}
-
-function makeDecimal() {
-    operand1 += numberValue;
-    operand1 = operand1 / 10;
-    isDecimal = false;
-}
-
-function displayFunc(displayNum) {
-
-    totalDigits = displayScreen.innerText.length;
-
-    if (totalDigits == 9) {
-        disableNumbers();
-    }
-
-    if (!Number.isInteger(displayNum)) {
-        displayScreen.innerText = displayNum.toFixed(3) * 1;
-    } else {
-        displayScreen.innerText = displayNum;
-    }
-}
-
-function disableNumbers() {
-    numbers.forEach((number) => {
-        number.setAttribute('disabled', true);
-        totalDigits = 0;
-
-    });
-}
-
-function enableNumbers() {
-
-    numbers.forEach((number) => {
-        number.removeAttribute('disabled', true);
-    });
-
-    displayFunc(theCurrentTotal);
-}
-
-operators.forEach((operator) => {
-    operator.addEventListener('click', () => {
-        enableNumbers();
-        isDecimal = false;
-        operatorValue = operator.innerText;
-
-        if (!previousOperator) {
-            addToCurrentTotal()
-        } else {
+operatorButtons.forEach((operatorButton) => {
+    operatorButton.addEventListener('click', (e) => {
+        currentOperator = e.target.value;
+        if (firstNumber && secondNumber) {
             calculate();
         }
-        previousOperator = operatorValue;
     });
 });
 
-function addToCurrentTotal() {
+numberButtons.forEach((numberButton) => {
+    numberButton.addEventListener('click', (e) => {
+        let number = e.target.value;
+        displayUserInput(number);
+    });
+});
 
-    theCurrentTotal += operand1;
-    operand1 = 0;
-    displayFunc(theCurrentTotal);
+function displayUserInput(number) {
+    storedOperator = currentOperator;
+
+    if (!currentOperator) {
+        firstNumber = firstNumber.concat(number);
+        displayScreen.innerText = firstNumber;
+        return;
+    }
+
+    if (currentOperator || secondNumber) {
+        if (!secondNumber) {
+            secondNumber = firstNumber;
+            firstNumber = '';
+        }
+
+        firstNumber = firstNumber.concat(number);
+        displayScreen.innerText = firstNumber;
+        return;
+    }
 }
 
 function calculate() {
-    if (previousOperator == '+' || previousOperator == '-') {
-        addToCurrentTotal();
-    } else if (previousOperator == 'x') {
-        multiply();
-    } else {
-        divide();
+    let numOne = parseFloat(firstNumber);
+    let numTwo = parseFloat(secondNumber);
+
+    switch (storedOperator) {
+        case "+":
+            secondNumber = numOne + numTwo;
+            displayCalculation();
+            break;
+        case "x":
+            secondNumber = numOne * numTwo;
+            displayCalculation();
+            break;
+        case "-":
+            secondNumber = numTwo - numOne;
+            displayCalculation();
+            break;
+        case "/":
+            secondNumber = numTwo / numOne;
+            displayCalculation();
+            break;
     }
 }
 
-function multiply() {
-    theCurrentTotal *= operand1;
-    displayFunc(theCurrentTotal);
-    operand1 = 0;
+function displayCalculation() {
+    displayScreen.innerText = secondNumber;
+    firstNumber = '';
 }
-
-function divide() {
-    theCurrentTotal /= operand1;
-    operand1 = 0;
-    displayFunc(theCurrentTotal);
-}
-
-equals.addEventListener('click', () => {
-    enableNumbers();
-    isDecimal = false;
-    equalsFunc();
-});
-
-function equalsFunc() {
-    if (operatorValue == 'x') {
-        multiply();
-    } else if (operatorValue == '÷') {
-        divide();
-    } else {
-        addToCurrentTotal();
-    }
-    operatorValue = '';
-    previousOperator = '';
-}
-
-resetCalculator.addEventListener('click', () => {
-    operand1 = 0;
-    theCurrentTotal = 0;
-    operatorValue = '';
-    previousOperator = '';
-    displayScreen.innerText = 0;
-    enableNumbers();
-});
